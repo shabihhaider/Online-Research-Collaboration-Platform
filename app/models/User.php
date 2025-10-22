@@ -105,4 +105,43 @@ class User
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
+
+    /**
+     * Get total user count
+     */
+    public function getTotalCount()
+    {
+        $sql = "SELECT COUNT(*) as count FROM users WHERE is_approved = 1";
+        $stmt = $this->db->query($sql);
+        $result = $stmt->fetch();
+        return $result['count'];
+    }
+
+    /**
+     * Get user count by role
+     */
+    public function getCountByRole()
+    {
+        $sql = "SELECT r.role_name, COUNT(*) as count 
+                FROM users u
+                JOIN roles r ON u.role_id = r.id
+                WHERE u.is_approved = 1
+                GROUP BY r.role_name";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Delete/deactivate a user
+     */
+    public function deleteUser($userId)
+    {
+        $sql = "UPDATE users SET is_approved = 0, is_active = 0 WHERE id = :id";
+        try {
+            $this->db->query($sql, [':id' => $userId]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }

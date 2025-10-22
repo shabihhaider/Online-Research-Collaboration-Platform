@@ -136,4 +136,66 @@ class Paper
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
+
+    /**
+     * Get total paper count
+     */
+    public function getTotalCount()
+    {
+        $sql = "SELECT COUNT(*) as count FROM papers";
+        $stmt = $this->db->query($sql);
+        $result = $stmt->fetch();
+        return $result['count'];
+    }
+
+    /**
+     * Get count by status
+     */
+    public function getCountByStatus()
+    {
+        $sql = "SELECT status, COUNT(*) as count FROM papers GROUP BY status";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Get papers submitted this month
+     */
+    public function getCountThisMonth()
+    {
+        $sql = "SELECT COUNT(*) as count FROM papers 
+                WHERE MONTH(submitted_at) = MONTH(CURRENT_DATE()) 
+                AND YEAR(submitted_at) = YEAR(CURRENT_DATE())";
+        $stmt = $this->db->query($sql);
+        $result = $stmt->fetch();
+        return $result['count'];
+    }
+
+    /**
+     * Get monthly submission stats
+     */
+    public function getMonthlySubmissions($months = 12)
+    {
+        $sql = "SELECT DATE_FORMAT(submitted_at, '%Y-%m') as month, COUNT(*) as count 
+                FROM papers 
+                WHERE submitted_at >= DATE_SUB(NOW(), INTERVAL ? MONTH)
+                GROUP BY month 
+                ORDER BY month ASC";
+        $stmt = $this->db->query($sql, [$months]);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Get papers by category
+     */
+    public function findByCategory($categoryId)
+    {
+        $sql = "SELECT p.*, u.name as author_name 
+                FROM papers p
+                JOIN users u ON p.author_id = u.id
+                WHERE p.category_id = :category_id 
+                ORDER BY p.submitted_at DESC";
+        $stmt = $this->db->query($sql, [':category_id' => $categoryId]);
+        return $stmt->fetchAll();
+    }
 }
