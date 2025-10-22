@@ -1,0 +1,11 @@
+{
+  "name": "research-platform",
+  "version": "1.0.0",
+  "description": "Frontend dependencies for the Online Research Collaboration Platform.",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/css/input.css -o ./public/assets/css/style.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "name": "wt/research-platform",
+    "description": "An online research collaboration platform.",
+    "type": "project",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
