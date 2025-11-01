@@ -25,8 +25,14 @@ class PagesController extends Controller
             switch ($roleId) {
                 case 1: // Researcher
                     $title = 'My Dashboard';
+                    
+                    // Load their own submissions
                     $paperModel = new \App\Models\Paper();
                     $data['papers'] = $paperModel->findByAuthor($userId);
+                    
+                    // Load the public library
+                    $libraryModel = new \App\Models\Library();
+                    $data['published_papers'] = $libraryModel->getPublishedPapers();
                     break;
                 case 2: // Reviewer
                     $title = 'Reviewer Dashboard';

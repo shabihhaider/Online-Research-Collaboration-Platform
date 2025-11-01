@@ -136,7 +136,8 @@ class AuthController extends Controller
             'id' => $user['id'],
             'name' => $user['name'],
             'email' => $user['email'],
-            'role_id' => $user['role_id']
+            'role_id' => $user['role_id'],
+            'profile_pic' => $user['profile_pic']
         ];
 
         // Redirect to the homepage (which will become their dashboard)

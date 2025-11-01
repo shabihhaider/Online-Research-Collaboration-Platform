@@ -24,18 +24,19 @@ class Paper
      * @param string $filePath The path to the stored file.
      * @return bool True on success, false on failure.
      */
-    public function create($authorId, $title, $abstract, $keywords, $filePath)
+    public function create($authorId, $categoryId, $title, $abstract, $keywords, $filePath)
     {
-        $sql = "INSERT INTO papers (author_id, title, abstract, keywords, file_path, status) 
-                VALUES (:author_id, :title, :abstract, :keywords, :file_path, 'Submitted')";
+        $sql = "INSERT INTO papers (author_id, category_id, title, abstract, keywords, file_path, status) 
+            VALUES (:author_id, :category_id, :title, :abstract, :keywords, :file_path, 'Submitted')";
 
-        try {
+         try {
             $this->db->query($sql, [
-                ':author_id' => $authorId,
-                ':title' => $title,
-                ':abstract' => $abstract,
-                ':keywords' => $keywords,
-                ':file_path' => $filePath
+            ':author_id' => $authorId,
+            ':category_id' => $categoryId,
+            ':title' => $title,
+            ':abstract' => $abstract,
+            ':keywords' => $keywords,
+            ':file_path' => $filePath
             ]);
             return true;
         } catch (\Exception $e) {

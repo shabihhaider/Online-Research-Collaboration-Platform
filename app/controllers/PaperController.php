@@ -27,9 +27,16 @@ class PaperController extends Controller
             exit;
         }
 
+        // --- New Code ---
+        // Fetch categories to display in the dropdown
+        $categoryModel = new \App\Models\Category();
+        $categories = $categoryModel->getAll();
+        // --- End New Code ---
+
         // The user is logged in, so show the submission form.
         return $this->view('papers/submit', [
-            'title' => 'Submit New Paper'
+            'title' => 'Submit New Paper',
+            'categories' => $categories // Pass categories to the view
         ]);
     }
 
@@ -48,6 +55,7 @@ class PaperController extends Controller
         $title = $_POST['title'] ?? '';
         $abstract = $_POST['abstract'] ?? '';
         $keywords = $_POST['keywords'] ?? '';
+        $categoryId = $_POST['category_id'] ?? null; // <-- ADD THIS
         $authorId = $_SESSION['user']['id'];
         $file = $_FILES['paper_file'] ?? null;
 
@@ -55,6 +63,7 @@ class PaperController extends Controller
         $errors = [];
         if (empty($title)) $errors[] = 'Title is required.';
         if (empty($abstract)) $errors[] = 'Abstract is required.';
+        if (empty($categoryId)) $errors[] = 'Category is required.'; // <-- ADD THIS
         if (empty($keywords)) $errors[] = 'Keywords are required.';
 
         // File validation
@@ -100,7 +109,7 @@ class PaperController extends Controller
         }
 
         // 6. Save to Database
-        $success = $this->paperModel->create($authorId, $title, $abstract, $keywords, $dbPath);
+        $success = $this->paperModel->create($authorId, $categoryId, $title, $abstract, $keywords, $dbPath);
 
         if ($success) {
             // Redirect to the homepage (which is now their dashboard)

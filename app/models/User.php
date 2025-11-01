@@ -29,6 +29,59 @@ class User
     }
 
     /**
+     * Find a user by their ID.
+     *
+     * @param int $id The user's ID.
+     * @return mixed The user record if found, or false.
+     */
+    public function findById($id)
+    {
+        $sql = "SELECT * FROM users WHERE id = :id LIMIT 1";
+        
+        $stmt = $this->db->query($sql, [':id' => $id]);
+        return $stmt->fetch();
+    }
+
+    /**
+     * Update a user's profile information.
+     *
+     * @param int $userId The ID of the user to update.
+     * @param string $name The new name.
+     * @param string $email The new email.
+     * @param string|null $profilePicPath The new profile pic path, or null to keep the old one.
+     * @return bool True on success, false on failure.
+     */
+    public function updateProfile($userId, $name, $email, $profilePicPath = null)
+    {
+        // If no new picture is uploaded, we only update name and email
+        if ($profilePicPath === null) {
+            $sql = "UPDATE users SET name = :name, email = :email WHERE id = :id";
+            $params = [
+                ':name' => $name,
+                ':email' => $email,
+                ':id' => $userId
+            ];
+        } else {
+            // If a new picture is uploaded, we update all three
+            $sql = "UPDATE users SET name = :name, email = :email, profile_pic = :profile_pic WHERE id = :id";
+            $params = [
+                ':name' => $name,
+                ':email' => $email,
+                ':profile_pic' => $profilePicPath,
+                ':id' => $userId
+            ];
+        }
+
+        try {
+            $this->db->query($sql, $params);
+            return true;
+        } catch (\Exception $e) {
+            // In a real app, you would log this error
+            return false;
+        }
+    }
+
+    /**
      * Get all users who are not yet approved.
      *
      * @return array An array of pending user records.

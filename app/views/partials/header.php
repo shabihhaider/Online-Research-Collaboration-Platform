@@ -55,17 +55,23 @@
                 <!-- Right Actions -->
                 <div class="flex items-center gap-3">
                     <?php if (isset($_SESSION['user'])): ?>
-                        <div class="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-slate-50 to-indigo-50/30 rounded-full border border-slate-200/50 shadow-sm">
+                        
+                        <a href="/profile" class="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-slate-50 to-indigo-50/30 rounded-full border border-slate-200/50 shadow-sm transition-all hover:shadow-md hover:border-slate-300">
                             <div class="text-right">
                                 <p class="text-sm font-semibold text-slate-900 leading-none"><?= htmlspecialchars($_SESSION['user']['name']) ?></p>
                                 <p class="text-xs text-slate-500 mt-1">
                                     <?php echo ['', 'Researcher', 'Reviewer', 'Editor', 'Librarian', 'Admin'][$_SESSION['user']['role_id']] ?? 'User'; ?>
                                 </p>
                             </div>
-                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-md">
-                                <?= strtoupper(substr($_SESSION['user']['name'], 0, 1)) ?>
+                            
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden">
+                                <?php if (!empty($_SESSION['user']['profile_pic'])): ?>
+                                    <img src="<?= htmlspecialchars($_SESSION['user']['profile_pic']) ?>" alt="Profile" class="h-full w-full object-cover">
+                                <?php else: ?>
+                                    <span><?= strtoupper(substr($_SESSION['user']['name'], 0, 1)) ?></span>
+                                <?php endif; ?>
                             </div>
-                        </div>
+                        </a>
                         <a href="/logout" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-all">Logout</a>
                     <?php else: ?>
                         <a href="/login" class="px-5 py-2 text-sm font-medium text-slate-700 hover:text-indigo-600 transition-all">Sign in</a>

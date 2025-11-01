@@ -44,16 +44,18 @@ class Library
         // This query joins the library, papers, and users tables
         // to get all the necessary details for the public-facing library.
         $sql = "SELECT 
-                    l.id as library_id,
-                    l.citation,
-                    p.id as paper_id,
-                    p.title,
-                    u.name as author_name,
-                    l.published_at
-                FROM library l
-                JOIN papers p ON l.paper_id = p.id
-                JOIN users u ON p.author_id = u.id
-                ORDER BY l.published_at DESC";
+        l.id as library_id,
+        l.citation,
+        p.id as paper_id,
+        p.title,
+        p.keywords, -- Added keywords
+        u.name as author_name,
+        u.profile_pic, -- Added profile pic
+        l.published_at
+        FROM library l
+        JOIN papers p ON l.paper_id = p.id
+        JOIN users u ON p.author_id = u.id
+        ORDER BY l.published_at DESC";
         
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
@@ -100,5 +102,34 @@ class Library
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * Find a single published paper by its PAPER ID.
+     *
+     * @param int $paperId The ID of the paper.
+     * @return mixed The record if found, or false.
+     */
+    public function findPublishedPaperById($paperId)
+    {
+        $sql = "SELECT 
+                    l.id as library_id,
+                    l.citation,
+                    l.published_at,
+                    p.id as paper_id,
+                    p.title,
+                    p.abstract,
+                    p.keywords,
+                    p.file_path,
+                    u.name as author_name,
+                    u.profile_pic
+                FROM library l
+                JOIN papers p ON l.paper_id = p.id
+                JOIN users u ON p.author_id = u.id
+                WHERE p.id = :paper_id
+                LIMIT 1";
+        
+        $stmt = $this->db->query($sql, [':paper_id' => $paperId]);
+        return $stmt->fetch();
     }
 }

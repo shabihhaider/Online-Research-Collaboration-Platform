@@ -12,6 +12,9 @@ $router->get('/login', 'AuthController@loginIndex'); // Shows the login form
 $router->post('/login', 'AuthController@loginStore'); // Handles login attempt
 // Logout route
 $router->get('/logout', 'AuthController@logout');
+// Profile routes
+$router->get('/profile', 'ProfileController@index'); // Shows the edit profile form
+$router->post('/profile/update', 'ProfileController@store'); // Handles the form submission
 
 // Paper Submission routes
 $router->get('/submit', 'PaperController@create'); // Shows the submission form
@@ -48,7 +51,7 @@ $router->post('/admin/categories/delete', 'AdminController@deleteCategory');
 
 // Public Library
 $router->get('/library', 'LibraryController@index');
-$router->get('/library/paper/{id}', 'LibraryController@view');
+$router->get('/library/paper/{id}', 'LibraryController@show');
 $router->get('/library/search', 'LibraryController@search');
 
 // Researcher - Paper Revision
