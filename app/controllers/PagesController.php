@@ -42,8 +42,18 @@ class PagesController extends Controller
                 case 3: // Editor
                     $title = 'Editor Dashboard';
                     $paperModel = new \App\Models\Paper();
-                    $data['submitted_papers'] = $paperModel->getSubmittedPapers();
-                    $data['decision_papers'] = $paperModel->getPapersReadyForDecision();
+                    
+                    // Get the data
+                    $submitted = $paperModel->getSubmittedPapers();
+                    $decisions = $paperModel->getPapersReadyForDecision();
+                    
+                    // Pass full data and counts
+                    $data['submitted_papers'] = $submitted;
+                    $data['decision_papers'] = $decisions;
+                    $data['stats'] = [
+                        'new_submissions' => count($submitted),
+                        'awaiting_decision' => count($decisions)
+                    ];
                     break;
                 case 4: // Librarian
                     $title = 'Library Management';

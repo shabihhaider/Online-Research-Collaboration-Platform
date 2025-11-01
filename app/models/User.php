@@ -146,14 +146,23 @@ class User
     }
 
     /**
-     * Get all approved users with the 'Reviewer' role.
+     * Get all approved users with the 'Reviewer' role, including their pending assignment count.
      *
      * @return array An array of reviewer user records.
      */
     public function getReviewers()
     {
         // Role 2 is 'Reviewer'
-        $sql = "SELECT id, name FROM users WHERE role_id = 2 AND is_approved = 1";
+        // This query now joins with assignments to count pending tasks
+        $sql = "SELECT 
+                    u.id, 
+                    u.name,
+                    (SELECT COUNT(*) 
+                     FROM assignments a 
+                     WHERE a.reviewer_id = u.id AND a.status = 'Pending') as pending_assignments
+                FROM users u 
+                WHERE u.role_id = 2 AND u.is_approved = 1
+                ORDER BY u.name ASC";
         
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll();

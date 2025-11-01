@@ -56,7 +56,8 @@ class Review
                     r.comments, 
                     r.score, 
                     r.recommendation, 
-                    u.name as reviewer_name 
+                    u.name as reviewer_name,
+                    u.profile_pic as reviewer_pic
                 FROM reviews r
                 JOIN assignments a ON r.assignment_id = a.id
                 JOIN users u ON a.reviewer_id = u.id

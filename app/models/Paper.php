@@ -199,4 +199,28 @@ class Paper
         $stmt = $this->db->query($sql, [':category_id' => $categoryId]);
         return $stmt->fetchAll();
     }
+
+    /**
+     * Update the paper's status and save the editor's comments.
+     *
+     * @param int $id The paper's ID.
+     * @param string $status The new status.
+     * @param string $comments The editor's comments.
+     * @return bool
+     */
+    public function updateDecision($id, $status, $comments)
+    {
+        $sql = "UPDATE papers SET status = :status, editor_comments = :comments WHERE id = :id";
+
+        try {
+            $this->db->query($sql, [
+                ':status' => $status,
+                ':comments' => $comments,
+                ':id' => $id
+            ]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }

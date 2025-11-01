@@ -50,7 +50,7 @@ require __DIR__ . '/../partials/header.php';
                         <div class="sm:col-span-6">
                             <label for="keywords" class="block text-sm font-medium leading-6 text-gray-900">Keywords</label>
                             <div class="mt-2">
-                                <input type="text" name="keywords" id="keywords" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                <input type="text" name="keywords" id="keywords" required class="block w-full rounded-xl border-0 py-3 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:shadow-lg transition-all duration-300 sm:text-sm sm:leading-6">
                             </div>
                             <p class="mt-3 text-sm leading-6 text-gray-600">Enter comma-separated keywords (e.g., AI, Web, Research).</p>
                         </div>

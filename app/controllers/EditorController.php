@@ -124,6 +124,7 @@ class EditorController extends Controller
         // 1. Get data from the form
         $paperId = $_POST['paper_id'] ?? null;
         $decision = $_POST['decision'] ?? null; // 'Accepted', 'Rejected', or 'Revision Requested'
+        $editorComments = $_POST['editor_comments'] ?? ''; // Get the new comments
 
         if (empty($paperId) || empty($decision)) {
             die('Invalid decision data.');
@@ -131,13 +132,16 @@ class EditorController extends Controller
 
         // 2. Process the decision
         if ($decision === 'Accepted') {
-            $this->paperModel->updateStatus($paperId, 'Accepted');
+            // Use the new updateDecision method
+            $this->paperModel->updateDecision($paperId, 'Accepted', $editorComments);
+            // Publish to library
             $this->libraryModel->publish($paperId);
+
         } elseif ($decision === 'Rejected') {
-            $this->paperModel->updateStatus($paperId, 'Rejected');
+            $this->paperModel->updateDecision($paperId, 'Rejected', $editorComments);
+
         } elseif ($decision === 'Revision Requested') {
-            // This is the new logic
-            $this->paperModel->updateStatus($paperId, 'Revision Requested');
+            $this->paperModel->updateDecision($paperId, 'Revision Requested', $editorComments);
         }
 
         // 3. Redirect the editor back to their dashboard
