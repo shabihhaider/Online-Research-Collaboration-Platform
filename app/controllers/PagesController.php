@@ -68,10 +68,21 @@ class PagesController extends Controller
                         'awaiting_decision' => count($decisions)
                     ];
                     break;
-                case 4: // Librarian
+               case 4: // Librarian
                     $title = 'Library Management';
                     $libraryModel = new \App\Models\Library();
-                    $data['published_papers'] = $libraryModel->getPublishedPapers();
+                    
+                    // Load the new stats
+                    $data['stats'] = [
+                        'total_published' => $libraryModel->getTotalPublishedCount(),
+                        'pending_citations' => $libraryModel->getPendingCitationCount()
+                    ];
+                    
+                    // Load the new "to-do" list
+                    $data['pending_papers'] = $libraryModel->getPendingCitations();
+                    
+                    // Load the full list for reference
+                    $data['all_papers'] = $libraryModel->getPublishedPapers();
                     break;
                 case 5: // Admin
                     $title = 'Admin Dashboard';
