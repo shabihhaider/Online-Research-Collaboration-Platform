@@ -206,4 +206,19 @@ class User
             return false;
         }
     }
+
+    /**
+     * Get all users in the system.
+     * @return array
+     */
+    public function getAllUsers()
+    {
+        $sql = "SELECT u.id, u.name, u.email, u.created_at, u.is_approved, u.is_active, r.role_name 
+                FROM users u
+                JOIN roles r ON u.role_id = r.id
+                ORDER BY u.created_at DESC";
+        
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    }
 }

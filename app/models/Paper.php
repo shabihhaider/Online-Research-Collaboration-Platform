@@ -223,4 +223,37 @@ class Paper
             return false;
         }
     }
+
+    /**
+     * Get all papers in the system for admin.
+     * @return array
+     */
+    public function getAllPapers()
+    {
+        $sql = "SELECT p.*, u.name as author_name, c.name as category_name
+                FROM papers p
+                LEFT JOIN users u ON p.author_id = u.id
+                LEFT JOIN categories c ON p.category_id = c.id
+                ORDER BY p.submitted_at DESC";
+        
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Force delete a paper from the database.
+     * @param int $paperId
+     * @return bool
+     */
+    public function forceDeletePaper($paperId)
+    {
+        // This will cascade and delete assignments/reviews
+        $sql = "DELETE FROM papers WHERE id = :id";
+        try {
+            $this.db->query($sql, [':id' => $paperId]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }

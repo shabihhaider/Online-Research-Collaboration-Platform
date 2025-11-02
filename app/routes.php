@@ -24,6 +24,12 @@ $router->post('/submit', 'PaperController@store'); // Handles form submission
 $router->get('/admin/users', 'AdminController@users'); // Shows the user management page
 $router->post('/admin/users/approve', 'AdminController@approve'); // Handles the user approval
 
+$router->get('/admin/manage/users', 'AdminController@manageUsers');
+$router->post('/admin/manage/deactivate', 'AdminController@deactivateUser');
+$router->get('/admin/manage/papers', 'AdminController@managePapers');
+$router->post('/admin/manage/paper/status', 'AdminController@updatePaperStatus');
+$router->post('/admin/manage/paper/delete', 'AdminController@deletePaper');
+
 // Editor routes
 $router->get('/editor/assign/{id}', 'EditorController@assignIndex'); // Shows the 'assign reviewers' page for a specific paper
 $router->post('/editor/assign', 'EditorController@assignStore'); // Handles the assignment form submission

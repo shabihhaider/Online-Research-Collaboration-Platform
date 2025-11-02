@@ -86,6 +86,15 @@ class PagesController extends Controller
                     break;
                 case 5: // Admin
                     $title = 'Admin Dashboard';
+                    $userModel = new \App\Models\User();
+                    $paperModel = new \App\Models\Paper();
+                    
+                    // Load stats for the new dashboard
+                    $data['stats'] = [
+                        'total_users' => $userModel->getTotalCount(),
+                        'total_papers' => $paperModel->getTotalCount(),
+                        'pending_approvals' => count($userModel->getPendingUsers())
+                    ];
                     break;
                 default:
                     $title = 'Dashboard';

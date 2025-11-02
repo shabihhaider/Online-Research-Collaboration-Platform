@@ -172,4 +172,71 @@ class AdminController extends Controller
         
         $this->redirect('/admin/categories');
     }
+
+    /**
+     * Show the full user management page.
+     */
+    public function manageUsers()
+    {
+        $users = $this->userModel->getAllUsers();
+        
+        return $this->view('admin/manage_users', [
+            'title' => 'Manage All Users',
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * Deactivate a user's account.
+     */
+    public function deactivateUser()
+    {
+        $userId = $_POST['user_id'] ?? null;
+        if ($userId) {
+            $this->userModel->deleteUser((int)$userId); // This is the deactivate function
+        }
+        $this->redirect('/admin/manage/users');
+    }
+
+    /**
+     * Show the full paper management page.
+     */
+    public function managePapers()
+    {
+        $paperModel = new \App\Models\Paper();
+        $papers = $paperModel->getAllPapers();
+        
+        return $this->view('admin/manage_papers', [
+            'title' => 'Manage All Papers',
+            'papers' => $papers
+        ]);
+    }
+
+    /**
+     * Update a paper's status from the admin panel.
+     */
+    public function updatePaperStatus()
+    {
+        $paperId = $_POST['paper_id'] ?? null;
+        $status = $_POST['status'] ?? null;
+        
+        if ($paperId && $status) {
+            $paperModel = new \App\Models\Paper();
+            $paperModel->updateStatus($paperId, $status);
+        }
+        $this->redirect('/admin/manage/papers');
+    }
+
+    /**
+     * Force delete a paper from the admin panel.
+     */
+    public function deletePaper()
+    {
+        $paperId = $_POST['paper_id'] ?? null;
+        if ($paperId) {
+            $paperModel = new \App\Models\Paper();
+            $paperModel->forceDeletePaper($paperId);
+        }
+        $this->redirect('/admin/manage/papers');
+    }
 }
