@@ -37,7 +37,20 @@ class PagesController extends Controller
                 case 2: // Reviewer
                     $title = 'Reviewer Dashboard';
                     $assignmentModel = new \App\Models\Assignment();
-                    $data['assignments'] = $assignmentModel->getPendingAssignmentsByReviewer($userId);
+                    
+                    // Get both pending and completed assignments
+                    $pending = $assignmentModel->getPendingAssignmentsByReviewer($userId);
+                    $completed = $assignmentModel->getCompletedAssignmentsByReviewer($userId);
+                    
+                    // Pass data to the view
+                    $data['assignments'] = $pending;
+                    $data['completed_reviews'] = $completed;
+                    
+                    // Create stats for the new dashboard
+                    $data['stats'] = [
+                        'pending' => count($pending),
+                        'completed' => count($completed)
+                    ];
                     break;
                 case 3: // Editor
                     $title = 'Editor Dashboard';

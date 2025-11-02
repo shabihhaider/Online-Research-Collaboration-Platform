@@ -108,4 +108,32 @@ class Assignment
             return false;
         }
     }
+
+    /**
+     * Get all completed assignments for a specific reviewer.
+     *
+     * @param int $reviewerId The reviewer's user ID.
+     * @return array An array of completed assignments.
+     */
+    public function getCompletedAssignmentsByReviewer($reviewerId)
+    {
+        // We join with papers, users, and reviews to get all details
+        $sql = "SELECT 
+                    a.id as assignment_id,
+                    p.id as paper_id,
+                    p.title,
+                    u.name as author_name,
+                    r.score,
+                    r.recommendation,
+                    r.submitted_at
+                FROM assignments a
+                JOIN papers p ON a.paper_id = p.id
+                JOIN users u ON p.author_id = u.id
+                JOIN reviews r ON r.assignment_id = a.id
+                WHERE a.reviewer_id = :reviewer_id AND a.status = 'Completed'
+                ORDER BY r.submitted_at DESC";
+
+        $stmt = $this->db->query($sql, [':reviewer_id' => $reviewerId]);
+        return $stmt->fetchAll();
+    }
 }
